@@ -36,12 +36,17 @@
             // Declare a proxy to reference the hub.
             var chat = $.connection.notifyHub;
             // Create a function that the hub can call to broadcast messages.
-            chat.client.broadcastMessage = function(name, message) {
-                // Html encode display name and message.
-                var encodedName = $('<div />').text(name).html();
+            chat.client.broadcastMessage = function(message, warning) {
+                // Html encode message.
+                
                 var encodedMsg = $('<div />').text(message).html();
+                var encodedwarning = $('<div />').text(warning).html();
                 // Add the message to the page.
-                var msg = '<li><strong>' + encodedName + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>';
+                var msg = '<strong>Hey!' + '</strong>:&nbsp;&nbsp;' + encodedMsg;// + '<br/>' + '';
+                if (warning !== null) {
+                    msg = msg + '<br/><strong>Hurry!' + '</strong>:&nbsp;&nbsp;' + encodedwarning;// + '<br/>' + '';
+                }
+
                 //$('#discussion').append(message);
 
                 // Display an info toast with no title

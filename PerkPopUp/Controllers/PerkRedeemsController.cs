@@ -1,6 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Runtime.Caching;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using PerkPopUp.Models;
@@ -50,11 +52,48 @@ namespace PerkPopUp.Controllers
                 db.PerkRedeems.Add(perkRedeem);
                 db.SaveChanges();
 
-                //notify all users
-                var context = GlobalHost.ConnectionManager.GetHubContext<NotifyHub>();
-                context.Clients.All.broadcastMessage( "Random user", "Redeemed: " + perkRedeem.PerkName);
+                var cache = MemoryCache.Default;
+                //How many users bought this in last 5 minutes?
+                //first, do i have this perk already redeemed in last 5 minutes
+                int existingCount = 0;
+                if (cache.Contains(perkRedeem.PerkName))
+                {
+                    var existingValue = cache[perkRedeem.PerkName].ToString();
+                    existingCount = Convert.ToInt32(existingValue);
+                    cache.Remove(perkRedeem.PerkName);
+                }
                 
-                //TODO: How many users bought this in last 5 minutes?
+                //second, add the new count
+                var key = perkRedeem.PerkName;
+                var perksRedeemed = existingCount + 1;
+                var policy = new CacheItemPolicy { SlidingExpiration = new TimeSpan(5, 0, 0) };
+                cache.Add(key, perksRedeemed, policy);
+                
+                
+                //third, update the stock 
+                string remainingMsg = null;
+                var current = db.PerkDatas.FirstOrDefault(x => x.PerkName == perkRedeem.PerkName);
+                if (current!=null)
+                {
+                    var stockQuantity = current.Quantity;
+                    stockQuantity--;
+                    remainingMsg = $"There are only {stockQuantity} {perkRedeem.PerkName} perks remaining!";
+                    db.PerkDatas.Remove(current);
+                    db.PerkDatas.Add(new PerkData
+                        {Id = current.Id, PerkName = current.PerkName, Quantity = stockQuantity});
+                    db.SaveChanges();
+                }
+                
+                //notify all users
+                var msg = $"{perkRedeem.PerkName} has been redeemed {perksRedeemed} times in the last 5 minutes!";
+                //if (!string.IsNullOrEmpty(remainingMsg))
+                //{
+                //    msg = msg + Environment.NewLine + remainingMsg;
+                //}
+                var context = GlobalHost.ConnectionManager.GetHubContext<NotifyHub>();
+                context.Clients.All.broadcastMessage(msg, remainingMsg);
+
+
 
                 return RedirectToAction("Index");
             }

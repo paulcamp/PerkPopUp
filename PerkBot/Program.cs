@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using OpenQA.Selenium;
@@ -7,8 +9,11 @@ using OpenQA.Selenium.Chrome;
 
 namespace PerkBot
 {
-    class Program
+    static class Program
     {
+        static Random _rnd = new Random();
+        static List<string> _variousPerks = new List<string>();
+
         static void Main(string[] args)
         {
             int perksToRedeem;
@@ -23,6 +28,8 @@ namespace PerkBot
                 perksToRedeem = Convert.ToInt32(args[0]);
             }
 
+            InitPerkList();
+            
             IWebDriver driver;
             driver = new ChromeDriver(AssemblyDirectory);
 
@@ -39,7 +46,7 @@ namespace PerkBot
 
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-                perkBox.SendKeys("Apple Music " + i.ToString());
+                perkBox.SendKeys(RandomPerkName());
 
                 Thread.Sleep(1000);
 
@@ -51,6 +58,22 @@ namespace PerkBot
 
         }
 
+        private static string RandomPerkName()
+        {
+            var length = _variousPerks.Count;
+            return _variousPerks.ElementAt( _rnd.Next(0,length) );
+        }
+
+        private static void InitPerkList()
+        {
+            _variousPerks.Add("Apple Music");
+            //_variousPerks.Add("Spotify");
+            //_variousPerks.Add("Amazon Prime");
+            _variousPerks.Add("Adidas");
+            _variousPerks.Add("Currys");
+            //_variousPerks.Add("Ann Summers");
+        }
+        
         public static string AssemblyDirectory
         {
             get
