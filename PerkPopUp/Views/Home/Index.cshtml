@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Hackday 2019";
+}
+
+<div class="jumbotron">
+    <h1>Perk Panic</h1>
+    <p class="lead">This sample application shows real-time perk redemptions to all users</p>
+    <p class="lead">The desired effect is to hype a perk and rush the user into claiming the same perk</p>
+    
+</div>
+
+
+<div class="container">
+    
+    <input type="hidden" id="displayname" value="anonymous user" />
+    
+</div>
+
+@section scripts {
+    
+    <!--Reference the jQuery library. -->
+    <script src="../../Scripts/jquery-3.3.1.js"></script>
+    <!--Reference the SignalR library. -->
+    <script src="../../Scripts/jquery.signalR-2.4.0.js"></script>
+    <script src="/signalr/hubs"></script>
+    
+    <!--Link to toastr.css* -->
+    <link rel="stylesheet" type="text/css" href="../../Content/toastr.css">
+    <!--Link to toastr.js* -->
+    <script src="../../Scripts/toastr.min.js"></script>
+    
+
+    <!--Add script to update the page and send messages.-->
+    <script type="text/javascript">
+        $(function() {
+            // Declare a proxy to reference the hub.
+            var chat = $.connection.notifyHub;
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.broadcastMessage = function(name, message) {
+                // Html encode display name and message.
+                var encodedName = $('<div />').text(name).html();
+                var encodedMsg = $('<div />').text(message).html();
+                // Add the message to the page.
+                var msg = '<li><strong>' + encodedName + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>';
+                //$('#discussion').append(message);
+
+                // Display an info toast with no title
+                toastr.info(msg);
+            };
+            // Get the user name and store it to prepend to messages.
+            //$('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+            //$('#message').focus();
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+            });
+        });
+    </script>
+}
+
+
