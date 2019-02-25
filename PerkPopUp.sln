@@ -9,6 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerkBot", "PerkBot\PerkBot.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0B20B71D-4408-425D-89DF-3B873BC77CAF}"
 	ProjectSection(SolutionItems) = preProject
+		PerkPanic1.PNG = PerkPanic1.PNG
+		PerkPanic2.PNG = PerkPanic2.PNG
+		PerkPanic3.PNG = PerkPanic3.PNG
 		README.md = README.md
 	EndProjectSection
 EndProject

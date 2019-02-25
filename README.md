@@ -24,6 +24,11 @@ When the PerbkBot is runnig and the Website is open on the Home page, you will s
 The website must be on the home page for the pop ups to appear - this behaviour could be extended to any page within the website.
   
 
+### Screenshots
 
+
+[Perk Notifications](file:///PerkPanic1.PNG)   
+[Perk Administration screen](file:///PerkPanic3.PNG)   
+[Perk Redemption Screen](file:///PerkPanic2.PNG)   
 
 
