@@ -27,8 +27,8 @@ The website must be on the home page for the pop ups to appear - this behaviour 
 ### Screenshots
 
 
-[Perk Notifications](file:///PerkPanic1.PNG)   
-[Perk Administration screen](file:///PerkPanic3.PNG)   
-[Perk Redemption Screen](file:///PerkPanic2.PNG)   
+[Perk Notifications](PerkPanic1.PNG?raw=true)   
+[Perk Administration screen](PerkPanic3.PNG?raw=true)   
+[Perk Redemption Screen](PerkPanic2.PNG?raw=true)   
 
 
