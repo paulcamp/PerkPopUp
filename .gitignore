@@ -36,3 +36,4 @@ packages/
 #############
 /_ReSharper.*
 *.ReSharper.*
+/.vs/PerkPopUp/config/applicationhost.config
